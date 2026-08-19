@@ -28,8 +28,8 @@ never "competition barely matters".
 | Quantity | Value |
 |---|---|
 | ω — Walmart U.S. ÷ total PCE | 2.21% |
-| ω — + Sam's Club, the maximum numerator | 2.64% |
-| ω — + the most adverse denominator | **3.62%** ← ceiling for the whole economy |
+| ω — + Sam's Club, the maximum numerator | 2.64% ← the highest any single firm reaches |
+| ω — + the most adverse denominator | **3.62%** ← upper bound across all measurement variants |
 | Uninternalised share `(1−ω)` | **≥ 96.4%** |
 | Model's `(1−1/N)` at N=1 / N=2 / N=4 | 0% / 50% / 75% |
 | Effective N = 1/ω — Walmart / Microsoft / Salesforce | 38 / 699 / 104,780 |
