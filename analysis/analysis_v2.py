@@ -23,19 +23,24 @@ import numpy as np
 # The paper is the case omega_i = 1/N (i.e. lam = Lam: the sector IS the economy).
 
 print("="*80)
-print("A.  BOUNDARY-INVARIANCE  --  why lam/N is the primitive and (lam, N) are not")
+print("A.  WHAT IS BOUNDARY-FREE, AND WHAT ONLY LOOKS IT")
 print("="*80)
-lam, N = 0.50, 8
-print(f"  a 'sector' with lam={lam}, N={N}          -> lam/N = {lam/N:.5f}")
-for split in (2, 4, 8):
-    print(f"  split it into {split} sub-sectors: lam={lam/split:.4f}, N={N//split}"
-          f"   -> lam/N = {(lam/split)/(N/split):.5f}   <- unchanged")
-print("  => lam/N is invariant to how sector boundaries are drawn; lam and N are not.")
-print("     Varying N while holding lam fixed (the paper's comparative static) is")
-print("     therefore a statement about FRAGMENTING A FIXED DEMAND POOL -- under which")
-print("     lam/N is literally firm i's share of worker income. That is measurable.")
-
-# ==================================================== 1. measurement variants
+print("  The paper internalises l/N per task, l = lam(1-eta)w. Per unit of lost")
+print("  worker INCOME that is lam/N.")
+print()
+print("  lam/N is invariant under SYMMETRIC subdivision only:")
+for d in (1, 2, 4, 8):
+    print(f"    lam={0.50/d:.4f} N={8//d}  ->  lam/N = {(0.50/d)/(8//d):.5f}")
+print()
+print("  Under a realistic ASYMMETRIC partition it moves:")
+print(f"    whole economy  lam=0.90 N=38  ->  {0.90/38:.5f}")
+print(f"    grocery only   lam=0.08 N=6   ->  {0.08/6:.5f}   (a factor of "
+      f"{(0.90/38)/(0.08/6):.2f})")
+print()
+print("  So the lemma is scope-limited and cannot by itself answer the sector-")
+print("  boundary objection. What can is omega = R_hh / PCE: it names no sector,")
+print("  so it is boundary-free by construction rather than by argument.")
+print(f"    measured directly: omega(Walmart) = {552.653/20_956.0:.5f}")
 PCE_2025_annual   = 20_956.0   # BEA/FRED, annual 2025, $bn
 IMPUTED_RENT      =  2_500.3   # BEA/FRED, 2025 -- a laid-off owner cannot cut this
 PCE_HEALTH_SVCS   =  3_551.6   # BEA/FRED, 2025 -- mostly third-party paid
@@ -107,9 +112,9 @@ om_max = ceil_om
 print(f"{'':<38}{'paper':>18}{'corrected':>20}")
 print("-"*80)
 for lbl, pv, cv in [
-    ("externality at N=1 (monopoly)",  "0%",     f">={(1-om_max)*100:.1f}%"),
-    ("externality at N=2 (duopoly)",   "50%",    f">={(1-om_max)*100:.1f}%"),
-    ("externality at N=7",             "85.7%",  f">={(1-om_max)*100:.1f}%"),
+    ("paper: sectoral monopolist",     "0%",     "not comparable"),
+    ("largest real firm, baseline",    "n/a",    f"{(1-552.653/20_956.0)*100:.1f}%"),
+    ("largest real firm, adverse",     "n/a",    f"{(1-om_max)*100:.1f}%"),
     ("externality as N->inf",          "100%",   "100%"),
     ("range over all market structures","0-100%", f"{(1-om_max)*100:.1f}-100%"),
     ("grand coalition of automators",  "closes it", "leaves >=96% open"),
@@ -117,6 +122,10 @@ for lbl, pv, cv in [
 ]:
     print(f"{lbl:<38}{pv:>18}{cv:>20}")
 print("-"*80)
-print("  The trap is not smaller than the paper says. It is UNIFORM and MAXIMAL:")
-print("  every U.S. firm already sits at the paper's N->infinity limit, so none of")
-print("  the model's escape routes -- concentration, merger, coalition -- exist.")
+print("  The first row is NOT a like-for-like comparison and is marked so. The")
+print("  paper's N=1 case is a monopolist over its own SECTOR, whose externality")
+print("  is zero by construction of that model; a real firm's omega is measured")
+print("  economy-wide. The finding is not that the paper's arithmetic fails. It")
+print("  is that no real firm is positioned anywhere near the internalisation its")
+print("  escape routes would require, so severity is uniform across market")
+print("  structures instead of graded by them.")

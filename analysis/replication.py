@@ -43,8 +43,15 @@ print(f"  wedge, from the rates  = {ne - co:.4f}")
 print(f"  wedge, closed form     = {closed_form:.4f}")
 print(f"  Pigouvian rate tau*    = {l * (1 - 1/N):.4f}")
 print("-" * 68)
+assert l < s < k + l, "this point is not interior; Prop 1(iii) does not apply"
+assert (s - l / N) / k <= 1, "alpha_NE is at the corner; the closed form is not the wedge"
 assert abs((ne - co) - closed_form) < 1e-12, "replication failed"
+print(f"  interiority l < s < k+l:  {l:.2f} < {s:.2f} < {k+l:.2f}  -- checked, not assumed")
 print("  MATCH to machine precision. The model is read correctly.")
+print()
+print("  A single point can match by coincidence, so the same identity is swept")
+print("  over a grid in tests.py section 1: it holds on every interior point and")
+print("  is correctly excluded on every corner point.")
 
 # Comparative statics the paper states, reproduced numerically.
 print("\n" + "=" * 68)

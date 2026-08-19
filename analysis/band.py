@@ -99,3 +99,27 @@ print("  Reading N as concentration confines the destructive band to expensive A
 print("  Measuring the same coefficient pushes the lower edge down by an order of")
 print("  magnitude, so the band covers essentially the whole capability range.")
 print("  Same model, same algebra - only the coefficient is measured, not assumed.")
+
+# ------------------------------------------------ heterogeneity: the caveat
+# The band above is a SYMMETRIC-economy result: one omega for every firm, with
+# N_econ = 1/omega. Under heterogeneity omega and N_econ are independent. Hold
+# N_econ fixed and vary omega, and the sign of (pi - Pi_0) flips: a small firm
+# absorbs almost none of the aggregate destruction and profits from automating.
+# So "leaves every firm worse off" is a claim about the symmetric economy, not
+# about a heterogeneous one, and has to be stated that way.
+N_FIXED, S_FIXED = 38, 0.7
+print()
+print("=" * 74)
+print("HETEROGENEITY -- why the band result is conditional on symmetry")
+print("=" * 74)
+print(f"  N_econ held at {N_FIXED}, s = {S_FIXED}, omega varied:")
+print(f"{'omega':>12}{'alpha_NE':>12}{'pi - Pi_0':>14}   outcome")
+print("-" * 74)
+for om in (OMEGA, 0.010, 0.005, 0.001, 1e-5):
+    a = min(max((S_FIXED - om * l) / k, 0), 1)
+    dpi = (L / (2 * k)) * (S_FIXED - om * l) * (S_FIXED - om * l * (2 * N_FIXED - 1))
+    verdict = "WORSE off than not automating" if dpi < 0 else "BETTER off"
+    print(f"{om:>12.5f}{a:>12.4f}{dpi:>+14.5f}   {verdict}")
+print("-" * 74)
+print("  The collective-harm claim therefore applies to firms with a meaningful")
+print("  share of the consumer wallet, not to every firm in the economy.")

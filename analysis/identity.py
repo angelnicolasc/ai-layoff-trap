@@ -56,9 +56,16 @@ print(f"{'paper, N=4':<48}{0.25:>9.4f}{0.75:>10.4f}")
 print(f"{'measured, Walmart+Sams / total PCE':<48}{om_base:>9.4f}{1-om_base:>10.4f}")
 print(f"{'measured, / cuttable PCE (most adverse)':<48}{om_adv:>9.4f}{1-om_adv:>10.4f}")
 print("-" * 76)
-print(f"  Ceiling for the entire U.S. economy: omega <= {om_adv*100:.2f}%")
-print(f"  Paper's wedge at N=1 is exactly 0. Corrected wedge is >= {LAM*(1-om_adv):.4f}.")
-print("  (Stated as two numbers, not a ratio -- the ratio has 0 in the denominator.)")
+print(f"  Upper bound across measurement variants: omega <= {om_adv*100:.2f}%")
+print(f"  Largest single firm on the baseline measure: {om_base*100:.2f}%")
+print("  These are different quantities and are never given the same label.")
+l_soc = LAM * (1 - 0.30) * 1.0        # Lam(1-eta)w, eta=0.30 as everywhere else
+print(f"  l_soc = Lam(1-eta)w = {l_soc:.4f}   (eta=0.30, w=1, k=1)")
+print(f"  Corrected wedge at that omega = (1-omega)*l_soc/k = {(1-om_adv)*l_soc:.4f}")
+print(f"  The paper's wedge at N=1 is exactly 0.")
+print("  Two numbers, not a ratio: the ratio has zero in the denominator.")
+print("  NOTE: (1-omega)*Lam alone is NOT the wedge -- it drops (1-eta) and 1/k,")
+print("  and equals the wedge only at eta=0. tests.py section 2 proves this.")
 
 # ------------------------------------------------- pre-empting two objections
 print("\n" + "=" * 76)
@@ -70,10 +77,10 @@ print("      firm at all, so the over-extension is the paper's, not ours.")
 print("  (b) It does not matter anyway. Attribute 100% of a firm's GLOBAL revenue")
 print("      to U.S. final consumption -- an attribution nobody would defend:")
 for lab, rev in [("Walmart, all segments incl. International", wmt_hh + wmt_intl),
-                 ("Amazon, all segments incl. AWS",            638.0),
+                 ("Amazon, all segments, calendar 2025",       716.9),
                  ("Apple, all global revenue",                 391.0)]:
     print(f"        {lab:<44} omega <= {rev/PCE*100:.2f}%")
-print(f"      Ceiling stays ~3.2%. The indirect channel cannot rebuild 1/N = 25%.")
+print("      The bound stays under 3.5%. The indirect channel cannot rebuild 1/N = 25%.")
 
 print("\n" + "=" * 76)
 print("5. OBJECTION B -- 'if every firm merged, omega = 1 and the escape exists'")

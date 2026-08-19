@@ -42,7 +42,7 @@ S.text_px(fig, L, 352,
           "Measure the same quantity against consumer spending and every firm behaves like one facing",
           size=14.5, color=S.INK_SOFT)
 S.text_px(fig, L, 378,
-          "between 10 and 20,000 times more competitors than it actually has.",
+          "between 9 and 21,000 times more competitors than it actually has.",
           size=14.5, color=S.INK_SOFT)
 
 # ------------------------------------------------------------------- card

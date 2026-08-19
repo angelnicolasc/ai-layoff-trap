@@ -64,8 +64,9 @@ ax.set_xticklabels(["1", "2", "5", "10", "50", "100", "500", "1000"])
 ax.text(880, 89, "REALITY", fontsize=14, color=S.SERIES_B, fontweight=S.B, ha="right")
 ax.text(880, 81.5,
         "Every operating U.S. firm is in this strip.\n"
-        "Walmart is the ceiling of the whole economy\n"
-        "and still leaves 97.4% on other firms.",
+        "Walmart is the largest single firm and still\n"
+        "leaves 97.4% of what it destroys on others.\n"
+        "The strip is drawn at 96.4%, the adverse case.",
         fontsize=13.5, color=S.ON_CARD, ha="right", va="top", linespacing=1.68)
 
 # below the curve, which only rises further to the right of this block
@@ -92,7 +93,7 @@ S.text_px(fig, L + 118, CA_TOP + 560, "monopoly", size=11.5, color=S.ON_CARD_2, 
 CB_TOP, CB_H = 1048, 250
 S.card_px(fig, L, CB_TOP, RGT - L, CB_H)
 S.text_px(fig, L + 40, CB_TOP + 44,
-          "Every measurement choice below is made to favour the paper. The ceiling barely moves.",
+          "Every measurement choice below favours the paper. The upper bound barely moves.",
           size=15, color=S.ON_CARD, weight=S.M)
 
 bx = S.axes_px(fig, L + 300, CB_TOP + 76, 660, 142)
