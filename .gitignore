@@ -5,3 +5,11 @@ source/paper_v3.txt
 
 # internal working files, not part of the published analysis
 design/
+
+# post assets are internal, like design/
+charts/post/
+
+# charts write their PNG relative to the cwd; running them from anywhere other
+# than charts/ drops duplicates that git add -A would otherwise sweep in
+/*.png
+charts/post_*.png
