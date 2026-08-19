@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 source/paper_v3.html
 source/paper_v3.txt
+
+# internal working files, not part of the published analysis
+design/
