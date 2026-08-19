@@ -377,6 +377,24 @@ wal_ok = all("90.238" in open(os.path.join(ROOT, f), encoding="utf-8", errors="r
 check("every script quoting Walmart uses the same two segments", wal_ok,
       f"{len(wal_hits)} scripts quote 462.415, all paired with 90.238")
 
+# firm revenues quoted in prose or code must equal params; a proximity heuristic
+# produces false positives (a 14.5pt font is not Alphabet's 15.0bn revenue), so
+# each quantity is checked by name against the scripts that actually use it.
+named_qty = [("Block total", P.FIRMS["Block"]["total"], ["analysis/identity.py"]),
+             ("Walmart hh",  P.FIRMS["Walmart"]["hh"],  ["analysis/identity.py",
+                                                          "analysis/band.py"])]
+drift = []
+for label, val, where in named_qty:
+    for rel in where:
+        txt = open(os.path.join(ROOT, rel), encoding="utf-8", errors="replace").read()
+        # a literal within 1 of the true value but not equal to it is drift
+        for m in re.finditer(r"(\d{1,3}\.\d+)", txt):
+            v = float(m.group(1))
+            if 0 < abs(v - val) < 1.0:
+                drift.append(f"{rel}:{v} vs {label}={val}")
+check("no script quotes a firm revenue that disagrees with params", not drift,
+      "Block and Walmart figures are single-sourced" if not drift else ", ".join(sorted(set(drift))[:4]))
+
 floors = []
 for fp in scripts:
     txt = open(fp, encoding="utf-8", errors="replace").read()

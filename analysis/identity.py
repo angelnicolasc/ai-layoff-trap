@@ -6,7 +6,12 @@ It needs no bridge through Lambda or disposable income: a displaced worker
 cuts spending across their consumption basket, and a firm's share of that
 basket is its revenue over PCE. Lambda enters only the level term l_soc.
 """
-PCE = 20_956.0                    # US personal consumption expenditure, 2025, USD bn (BEA/FRED)
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import params as _P
+
+PCE = _P.PCE                    # US personal consumption expenditure, 2025, USD bn (BEA/FRED)
 
 # ---------------------------------------------------------------- definition
 print("=" * 76)
@@ -105,10 +110,11 @@ print("  is dominated by bitcoin resale. Its laid-off engineers were never its")
 print("  customers. Computing omega under three increasingly generous readings:\n")
 for lab, rev in [("Cash App, ex-bitcoin (a fair reading)",  6.0),
                  ("ALL of Cash App incl. bitcoin resale",  15.4),
-                 ("100% of Block's global revenue",        24.0)]:
+                 ("100% of Block's global revenue",        _P.FIRMS["Block"]["total"])]:
     om = rev / PCE
     print(f"    {lab:<40} omega = {om*100:.3f}%   ->  {om*100:>5.2f} USD per 100 destroyed")
 print(f"\n  Even the absurd upper bound leaves Block at ~{24.0/PCE*100:.2f}% -- roughly")
-print(f"  {(wmt_hh/PCE)/(24.0/PCE):.0f}x below Walmart and {0.25/(24.0/PCE):.0f}x below the 1/N the paper assigns N=4.")
+print(f"  {(wmt_hh/PCE)/(_P.FIRMS['Block']['total']/PCE):.0f}x below Walmart and "
+      f"{0.25/(_P.FIRMS['Block']['total']/PCE):.0f}x below the 1/N the paper assigns N=4.")
 print("  The paper picked, as its illustration of the trap, the firm whose own")
 print("  internalisation is closest to zero.")
