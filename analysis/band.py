@@ -123,3 +123,37 @@ for om in (OMEGA, 0.010, 0.005, 0.001, 1e-5):
 print("-" * 74)
 print("  The collective-harm claim therefore applies to firms with a meaningful")
 print("  share of the consumer wallet, not to every firm in the economy.")
+
+# ------------------------------------- the heterogeneous case, solved properly
+# The section above holds N_econ fixed and varies omega, which is a sensitivity,
+# not an equilibrium. Solving it properly: the demand term is linear in the sum
+# of automation rates, so each firm's first-order condition is independent of
+# its rivals and every firm plays its dominant alpha_i = (s - om_i*l)/k. With
+# Sum(om_j) = 1 the aggregate is Sum(alpha_j) = (N*s - l)/k, giving
+#
+#     pi_i - Pi_0 = (L/k) [ (s^2 - om_i^2 l^2)/2  -  om_i * l * (N*s - l) ]
+#
+# The crossover omega* where a firm stops being harmed is strongly N_econ
+# dependent, so it is a sensitivity result, not a single publishable number.
+s_h = 0.7
+het = lambda om, N: (L / k) * ((s_h ** 2 - (om * l) ** 2) / 2 - om * l * (N * s_h - l))
+named = {"Walmart": 0.026372, "Amazon": 0.020328, "Costco": 0.008589,
+         "Home Depot": 0.007253, "Microsoft": 0.001431, "Salesforce": 0.0000095}
+print()
+print("=" * 74)
+print("HETEROGENEOUS EQUILIBRIUM -- and why the crossover is not one number")
+print("=" * 74)
+print(f"{'N_econ':>9}{'crossover omega*':>20}{'named firms worse off':>26}")
+print("-" * 74)
+for N_e in (38, 100, 500, 2007):
+    gg = np.linspace(1e-9, 0.5, 200001)
+    vv = het(gg, N_e)
+    idx = np.where(np.diff(np.sign(vv)) != 0)[0]
+    star = gg[idx[0]] if len(idx) else float("nan")
+    n_bad = sum(het(o, N_e) < 0 for o in named.values())
+    print(f"{N_e:>9}{star*100:>19.3f}%{n_bad:>20} of {len(named)}")
+print("-" * 74)
+print("  At N_econ=38 only the two largest firms are individually worse off; at a")
+print("  realistic firm count almost all of them are. The aggregate stays negative")
+print("  throughout, so the trap survives heterogeneity even where the per-firm")
+print("  claim does not.")

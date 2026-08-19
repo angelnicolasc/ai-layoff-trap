@@ -12,7 +12,7 @@ FLOOR = 100 - (462.415 + 90.238) / 15_259.0 * 100      # 96.38 %
 
 S.header(fig)
 S.text(fig, L, 200, "Three escape hatches.", size=52, color=S.INK, weight=S.B)
-S.text(fig, L, 264, "None of them exist.",   size=52, color=S.INK, weight=S.B)
+S.text(fig, L, 264, "No firm can reach them.", size=48, color=S.INK, weight=S.B)
 S.text(fig, L, 326, "The model says concentration saves you.",
        size=30, color=S.ACCENT, weight=S.M)
 

@@ -27,7 +27,7 @@ S.text_px(fig, RGT, 62, "Nick Cerutti", size=15, color=S.INK_SOFT, ha="right")
 S.rule_px(fig, L, RGT, 100)
 
 S.text_px(fig, L, 178, "Three escape hatches.", size=48, color=S.INK, weight=S.B)
-S.text_px(fig, L, 240, "None of them exist.",   size=48, color=S.INK, weight=S.B)
+S.text_px(fig, L, 240, "No firm can reach them.", size=44, color=S.INK, weight=S.B)
 S.text_px(fig, L, 300,
           "Falk & Tsoukalas prove firms over-automate because each absorbs only 1/N of the demand it destroys —",
           size=14.5, color=S.INK_SOFT)

@@ -107,7 +107,7 @@ hit".
 | `analysis_v2.py` | What is boundary-free and what only looks it; measurement robustness; corrected comparative statics. |
 | `band.py` | The destructive band, with the derivation in the docstring, `N_econ` swept, and a heterogeneity section showing where the result stops holding. |
 | `fold.py` | Endogenous reabsorption with a power-law `η(D)`. Finds **no** fold: one stable equilibrium throughout. |
-| `fold2.py` | The same with threshold-like (logistic) `η(D)`. Bistable above a critical automation rate, with stability labels and the separatrix. |
+| `fold2.py` | The same with threshold-like (logistic) `η(D)`. Reports the bistability *window* — both saddle-nodes, not just the onset — plus stability labels and the separatrix. |
 
 ### `charts/`
 | File | What it is |
@@ -149,8 +149,8 @@ the claim made here:
 | Third-party share of health spending | 0.90 | CMS NHE: out-of-pocket ≈ 10%. A higher share shrinks the denominator and *raises* ω. |
 | Imputed rent netted out | USD 2,500bn | Same direction: raises ω. |
 | Numerator | Walmart U.S. + Sam's Club | The largest U.S. household-facing revenue there is. |
-| Block numerator | Cash App ex-bitcoin | A consistency rule, not a convenience: asset purchases are not consumption and PCE excludes them. Both looser readings are reported and neither exceeds 0.11%. |
-| `fold2.py`: η_max, κ, D* | 0.85, swept 0.5–5, 0.72·D_full | Swept, not fitted. Caveat 6 states what the sweep actually produces. |
+| Block numerator | Cash App ex-bitcoin | A consistency rule, not a convenience: asset purchases are not consumption and PCE excludes them. Both looser readings are reported and neither exceeds 0.12%. |
+| `fold2.py`: η_max, κ, D* | η_max = 0.85 and D* = 0.72·D_full are FIXED; only κ is swept, over 0.5–5. Caveat 6 states what the sweep produces. |
 
 ---
 
@@ -182,13 +182,22 @@ the claim made here:
 4. **The level is sector-dependent; the result is not.** The *magnitude* of the wedge depends on how
    a sector is drawn. The finding that no firm reaches the required internalisation does not.
 5. **The band result assumes a symmetric economy.** `band.py` derives it with one ω for all firms
-   and `N_econ = 1/ω`. Under heterogeneity the sign flips: a firm with ω ≈ 0 absorbs almost none of
-   the aggregate destruction and ends up *better* off automating. The collective-harm claim applies
-   to firms with a meaningful wallet share, not to every firm.
-6. **The fold is conditional on the shape of η(D).** Under a power law there is none (`fold.py`).
-   Under a logistic one there is, and the sweep gives α_crit ∈ [0.480, 0.618] at A=2 and
-   [0.575, 0.792] at A=4 — and A=4 folds at κ=1.0, so there is no single κ threshold. Whether the
-   trap has a tipping point is an empirical question about η(D) that nobody currently measures.
+   and `N_econ = 1/ω`. Solving the heterogeneous case instead — every firm plays its dominant
+   `α_i = (s−ω_iℓ)/k`, with `Σω_j = 1` — gives
+   `π_i − Π₀ = (L/k)[(s²−ω_i²ℓ²)/2 − ω_iℓ(Ns−ℓ)]`. A firm with ω ≈ 0 ends up *better* off. The
+   crossover is strongly `N_econ`-dependent and therefore not publishable as a single number: it
+   sits at 1.50% for `N_econ`=38 and 0.03% for `N_econ`=2007. The aggregate stays negative in every
+   case, so the trap survives heterogeneity even though the per-firm claim does not.
+6. **The fold is a bounded window, and conditional on the shape of η(D).** Under a power law there
+   is no fold at all (`fold.py`), and that is structural rather than a choice of sigmoid: a convex
+   η gives a convex fixed-point map, which admits at most two crossings and so never three. Under a
+   logistic η the system is bistable over a *window* in α, not everywhere past an onset. At A=2,
+   κ=1.5 the window is [0.62, 0.70]; at A=4, κ=1.0 it is [0.79, 0.80] — quoted to two
+   decimals because the fourth depends on the root-finding method, not on the model. Both branches
+   survive to α=1 only for κ ≥ 3 (A=2) and κ ≥ 2 (A=4). Where the window closes, automation alone
+   destroys the high-reabsorption equilibrium and no external shock is needed; where it persists,
+   automation narrows the basin and a shock does the pushing. Which regime holds is an empirical
+   question about η(D) that nobody currently measures.
 7. **Figure comparisons.** Claims about the paper's own figures are limited to what its text states.
    The paper does not give the axis range of its Figure 1, so no range is asserted here.
 

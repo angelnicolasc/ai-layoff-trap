@@ -77,7 +77,7 @@ print(f"   - Walmart is ~60% grocery; laid-off workers cut discretionary harder 
 print(f"     staples, so Walmart's share of the CUT is below its share of the LEVEL.")
 print(f"   - Trade-down: displaced workers shift spending TOWARD Walmart, offsetting")
 print(f"     the revenue loss further (omega could even be negative).")
-print(f"\n  CEILING FOR THE ENTIRE U.S. ECONOMY: omega <= {ceil_om*100:.2f}%"
+print(f"\n  UPPER BOUND ACROSS MEASUREMENT VARIANTS: omega <= {ceil_om*100:.2f}%"
       f"  ->  externality >= {(1-ceil_om)*100:.2f}%")
 
 # ==================================================== 2. the firm cross-section

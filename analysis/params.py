@@ -160,3 +160,77 @@ NOTES = {
               "forward RAISES omega, which weakens the claim made here; "
               "tests.py bounds that sensitivity explicitly.",
 }
+
+
+# ------------------------------------------------- fold detection, shared
+# fold2.py and tests.py both call these, so the onset/offset published in the
+# README cannot drift from what the code produces. The previous version had
+# fold2.py printing 0.620/0.795 (coarse scan) while the README said 0.618/0.792
+# (fine simulation): two numbers for one quantity, the failure this file exists
+# to prevent.
+def fold_maps(A, kappa, n=FOLD_N, eta_max=FOLD_ETA_MAX, dstar=FOLD_DSTAR_FRAC):
+    import numpy as np
+    d_full = A + LAM * W * n
+    d_star = dstar * d_full
+    eta = lambda D: eta_max / (1 + np.exp(-kappa * (D - d_star)))
+    dof = lambda a, e: A + LAM * W * n * (1 - (1 - e) * a)
+    return eta, dof
+
+
+def fold_roots(alpha, eta, dof, grid=40_001):
+    """Fixed points of eta = eta(D(alpha, eta)), with stability."""
+    import numpy as np
+    e = np.linspace(0, 1, grid)
+    g = eta(dof(alpha, e)) - e
+    out = []
+    for i in np.where(np.diff(np.sign(g)) != 0)[0]:
+        lo, hi = e[i], e[i + 1]
+        for _ in range(70):
+            m = 0.5 * (lo + hi)
+            if np.sign(eta(dof(alpha, lo)) - lo) == np.sign(eta(dof(alpha, m)) - m):
+                lo = m
+            else:
+                hi = m
+        r = 0.5 * (lo + hi)
+        h = 1e-6
+        slope = ((eta(dof(alpha, r + h)) - (r + h)) -
+                 (eta(dof(alpha, r - h)) - (r - h))) / (2 * h)
+        out.append((r, "stable" if slope < 0 else "UNSTABLE"))
+    return out
+
+
+def fold_window(A, kappa, coarse=201, refine=30):
+    """Both saddle-nodes: (onset, offset, persists_to_alpha_1) or None.
+
+    Bistability is a WINDOW in alpha, not a half-line. Scanning only for the
+    first alpha with three roots finds the onset and silently misses the second
+    edge, which is how the half-line version got published: false for four of
+    the eight folding cells in this sweep.
+
+    A coarse scan brackets the window, then each edge is bisected. Scanning the
+    whole interval finely is ~20x slower for the same answer to 1e-4.
+    """
+    import numpy as np
+    eta, dof = fold_maps(A, kappa)
+    tri = lambda a: len(fold_roots(a, eta, dof, 20_001)) >= 3
+    grid = np.linspace(0, 1, coarse)
+    flags = [tri(a) for a in grid]
+    if not any(flags):
+        return None
+    first = flags.index(True)
+    last = len(flags) - 1 - flags[::-1].index(True)
+
+    def edge(lo, hi, want_true_at_hi):
+        for _ in range(refine):
+            m = 0.5 * (lo + hi)
+            if tri(m) == want_true_at_hi:
+                hi = m
+            else:
+                lo = m
+        return hi if want_true_at_hi else lo
+
+    on = grid[0] if first == 0 else edge(grid[first - 1], grid[first], True)
+    if last == len(grid) - 1:
+        return on, 1.0, True
+    off = edge(grid[last], grid[last + 1], False)
+    return on, off, False
